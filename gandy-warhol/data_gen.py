@@ -1,18 +1,21 @@
 import tensorflow as tf
 import random
 import numpy as np
+from params import *
 
 class CustomDataGen(tf.keras.utils.Sequence):
 
     def __init__(self, X,
                  batch_size=4,
-                 input_size=(224, 224),
-                 shuffle=True):
+                 input_size=input_size,
+                 shuffle=True,
+                 resizer=False):
 
         self.X = X.copy()
         self.batch_size = batch_size
         self.input_size = input_size
         self.shuffle = shuffle
+        self.resizer = resizer
 
         self.n = len(self.X)
 
@@ -31,7 +34,8 @@ class CustomDataGen(tf.keras.utils.Sequence):
         temp_list = []
         for i in range(index*self.batch_size,(index+1)*self.batch_size):
             img = self.img_loader(self.X[i])
-            img = self.resize(img)
+            if self.resizer==True:
+                img = self.resize(img)
             temp_list.append(img)
         return np.stack(temp_list)
 
