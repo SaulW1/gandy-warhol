@@ -14,15 +14,14 @@ def get_data(style="Abstract-Expressionism"):
     art_list=list(df[df['Style']==style]["Link"])
     return art_list
 
-def download_files(directory = 'raw_data'):
+def download_files(directory = 'raw_data/abstract_ex'):
     art_list = get_data(style="Abstract-Expressionism")
     errors = []
+    if not os.path.exists(directory):
+        os.makedirs(directory)  # create folder if it does not exist
     for i in range(len(art_list)):
-        if not os.path.exists(directory):
-            os.makedirs(directory)  # create folder if it does not exist
         filename = f'{i}.jpeg'  # be careful with file names
         file_path = os.path.join(directory, filename)
-
         try:
             r = requests.get(art_list[i], stream=True)
             with open(file_path, 'wb') as f:
