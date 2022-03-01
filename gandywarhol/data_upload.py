@@ -1,16 +1,14 @@
 import pandas as pd
 import numpy as np
-from google.cloud import storage
-import urllib.request
 import os
 import requests
-from params import *
+from gandywarhol.params import *
 import tensorflow.image
 import tensorflow.keras.utils
 
 
-def get_data(style="Abstract-Expressionism"):
-    df = pd.read_csv("raw_data/wikiart_scraped.csv")
+def get_data(style="Abstract-Expressionism", path = "raw_data/wikiart_scraped.csv"):
+    df = pd.read_csv(path)
     art_list=list(df[df['Style']==style]["Link"])
     return art_list
 
