@@ -1,7 +1,7 @@
 import tensorflow as tf
 import random
 import numpy as np
-from params import *
+from gandywarhol.params import *
 
 class CustomDataGen(tf.keras.utils.Sequence):
 
