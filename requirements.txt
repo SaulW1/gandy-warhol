@@ -29,4 +29,3 @@ memoized-property
 termcolor
 
 tensorflow
-random
