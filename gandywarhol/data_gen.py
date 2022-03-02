@@ -6,7 +6,7 @@ from gandywarhol.params import *
 class CustomDataGen(tf.keras.utils.Sequence):
 
     def __init__(self, X,
-                 batch_size=4,
+                 batch_size=32,
                  input_size=input_size,
                  shuffle=True,
                  resizer=False):
@@ -21,7 +21,7 @@ class CustomDataGen(tf.keras.utils.Sequence):
 
     def on_epoch_end(self):
         if self.shuffle:
-            print('resuffling data...')
+            print('reshuffling data...')
             random.shuffle(self.X)
 
     def img_loader(self, path):
