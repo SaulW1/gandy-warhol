@@ -21,7 +21,7 @@ class CustomDataGen(tf.keras.utils.Sequence):
 
     def on_epoch_end(self):
         if self.shuffle:
-            print('reshuffling data...')
+            print('Reshuffling data...')
             random.shuffle(self.X)
 
     def img_loader(self, path):
