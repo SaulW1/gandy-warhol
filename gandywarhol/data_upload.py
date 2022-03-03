@@ -9,19 +9,21 @@ import tensorflow.keras.utils
 
 def get_data(style="Abstract-Expressionism", path = "raw_data/wikiart_scraped.csv"):
     df = pd.read_csv(path)
-    art_list=list(df[df['Style']==style]["Link"])
+    art_list = df[df['Style']==style]
     return art_list
 
-def download_files(directory = 'raw_data/abstract_ex'):
-    art_list = get_data(style="Abstract-Expressionism")
+def download_files(directory = 'raw_data/abstract_ex2'):
+    art_list = get_data(style="Abstract-Expressionism").reset_index()
+    art_list_links = list(art_list["Link"])
     errors = []
     if not os.path.exists(directory):
         os.makedirs(directory)  # create folder if it does not exist
-    for i in range(len(art_list)):
-        filename = f'{i}.jpeg'  # be careful with file names
+    for i in range(len(art_list_links)):
+        indexno = art_list.iloc[i]['index']
+        filename = f'{indexno}.jpeg'  # be careful with file names
         file_path = os.path.join(directory, filename)
         try:
-            r = requests.get(art_list[i], stream=True)
+            r = requests.get(art_list_links[i], stream=True)
             with open(file_path, 'wb') as f:
                 for chunk in r.iter_content(chunk_size=1024 * 8):
                     if chunk:
