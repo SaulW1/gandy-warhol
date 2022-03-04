@@ -12,8 +12,8 @@ def get_data(style="Abstract-Expressionism", path = "raw_data/wikiart_scraped.cs
     art_list = df[df['Style']==style]
     return art_list
 
-def download_files(directory = 'raw_data/abstract_ex2'):
-    art_list = get_data(style="Abstract-Expressionism").reset_index()
+def download_files(directory = 'raw_data/abstract_ex2', style ="Abstract-Expressionism"):
+    art_list = get_data(style=style).reset_index()
     art_list_links = list(art_list["Link"])
     errors = []
     if not os.path.exists(directory):
@@ -43,4 +43,4 @@ def download_files(directory = 'raw_data/abstract_ex2'):
 
 
 if __name__  == "__main__":
-    download_files()
+    download_files(directory = "raw_data/imp", style="Impressionism")
