@@ -12,13 +12,13 @@ def get_data(style="Abstract-Expressionism", path = "raw_data/wikiart_scraped.cs
     art_list = df[df['Style']==style]
     return art_list
 
-def download_files(directory = 'raw_data/abstract_ex2', style ="Abstract-Expressionism"):
+def download_files(directory = 'raw_data/abstract_ex2', style ="Abstract-Expressionism", howmany = 5):
     art_list = get_data(style=style).reset_index()
     art_list_links = list(art_list["Link"])
     errors = []
     if not os.path.exists(directory):
         os.makedirs(directory)  # create folder if it does not exist
-    for i in range(len(art_list_links)):
+    for i in range(howmany):
         indexno = art_list.iloc[i]['index']
         filename = f'{indexno}.jpeg'  # be careful with file names
         file_path = os.path.join(directory, filename)
