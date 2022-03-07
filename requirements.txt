@@ -30,3 +30,4 @@ termcolor
 scikit-image
 
 tensorflow
+imageio
