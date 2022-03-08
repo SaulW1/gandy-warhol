@@ -9,6 +9,15 @@ import numpy as np
 import pandas as pd
 import pickle
 
+"""
+REQUIRES TO RUN:
+- Trained VGG model to embed input files
+- Trained KNN model to find neighbours
+- all data CSV file
+- all 3600 images with correct filenames
+"""
+
+
 modelpath = "raw_data/models"
 outDir = "raw_data/created_images"
 extensions = [".jpg", ".jpeg"]
@@ -45,17 +54,13 @@ def resize_img(img, shape_resized):
     assert img_resized.shape == shape_resized
     return img_resized
 
-def get_vgg19_model(shape_img, load_from_net = False):
-    if load_from_net == True:
-        model = VGG19(weights='imagenet', include_top=False,
-                                             input_shape=shape_img)
-    if load_from_net == False:
-        model = load_model(os.path.join(modelpath,"vgg19_autoencoder.h5"))
+def get_vgg19_model(vggmodel = "raw_data/models/vgg19_autoencoder.h5"):
+    model = load_model(vggmodel)
     model.compile()
     return model
 
-def get_art_info(style = "Abstract-Expressionism"):
-    art_info = pd.read_csv("raw_data/wikiart_scraped.csv")
+def get_art_info(style = "Abstract-Expressionism", file_location = "raw_data/wikiart_scraped.csv"):
+    art_info = pd.read_csv(file_location)
     art_info = art_info[art_info['Style']==style]
     return art_info
 
@@ -85,12 +90,13 @@ def single_image_neighbours_info_as_dict(E_test_flatten, knn, art_info):
 
 import matplotlib.pyplot as plt
 
-def find_k_neighbours(image = "raw_data/test_images/26601.jpeg"):
+def find_k_neighbours(image = "raw_data/test_images/26601.jpeg", vggmodel = "raw_data/models/vgg19_autoencoder.h5",
+                        knnmodel="raw_data/models/knnpickle_file", file_location = "raw_data/wikiart_scraped.csv"):
     image = [read_img(image)]
     shape_img = image[0].shape
     output_shape_model = (4, 4, 512)
     # instantiate model
-    model = get_vgg19_model(shape_img, load_from_net = False)
+    model = get_vgg19_model(vggmodel = vggmodel)
     transformer = ImageTransformer(shape_img)
     img_transformed = apply_transformer(image, transformer)
     X_test = get_images_as_array(img_transformed, shape_img)
@@ -98,9 +104,9 @@ def find_k_neighbours(image = "raw_data/test_images/26601.jpeg"):
     E_test = model.predict(X_test)
     E_test_flatten = get_flattened_array(E_test, output_shape_model)
     # process with knn
-    knnfile = os.path.join(modelpath,"knnpickle_file")
+    knnfile = knnmodel
     knn = pickle.load(open(knnfile, "rb"))
-    art_info = get_art_info()
+    art_info = get_art_info(file_location = file_location)
     ###
     result = single_image_neighbours_info_as_dict(E_test_flatten, knn, art_info)
     return result
