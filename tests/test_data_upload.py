@@ -6,7 +6,7 @@ import tensorflow.image
 import tensorflow.keras.utils
 
 def test_data_upload():
-    assert type(get_data(path = "raw_data/wikiart_scraped.csv")) == list
+    assert get_data(style="Abstract-Expressionism", path = "raw_data/wikiart_scraped.csv")['Style'].iloc[1] == "Abstract-Expressionism"
 
 def test_processed_images(images_path = "raw_data/abstract_ex2"):
     images_path = images_path
